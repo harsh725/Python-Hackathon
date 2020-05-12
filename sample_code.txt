@@ -1,0 +1,125 @@
+from PIL import *
+from random import *
+from tkinter import *
+import time
+ward=['Kempegowda','Chowdeshwari','Attur ','Yelahanka Satellite Town','Jakkur','Thanisandra','Byatarayanapura','Kodigehalli ','Vidyaranyapura','Doddabommasandra','Kuvempu Nagar',
+      'Shettyhalli','Mallasandra','Bagalagunte','T-Dasarahalli ','Jalahalli ','J.P.Park ','Radhakrishna Temple ','Sanjay Nagar ','Ganga Nagar','Hebbal','Vishwanathnagenahalli B','Bilekahalli', 'Hongasandra',
+      'Hagaduru', 'Radhakrishna Temple', 'Maruthi Seva Nagar', 'Ramaswamy Palya', 'Pulikeshi Nagar', 'Vasanth Nagar', 'Sudama Nagar', 'Hosahalli',
+     'Hampi Nagar', 'Bapuji Nagar', 'Deepanjali Nagar', 'Keresandra', 'Byrasandra', 'Shakambari Nagar', 'Padarayanapura',
+     'Jagajeevanagaram Nagar', 'Chalavadi palya', 'KR Market', 'Yeshwanthpur ','Rajarajeshwari Nagar']
+gender=["Male","Female","Other"]
+red=['Hagaduru', 'Bapuji Nagar','Deepanjali Nagar','Shakambari Nagar','Ganga Nagar','Vishwanathnagenahalli B','Attur ','Maruthi Seva Nagar',]
+corona_symtomp=['asthama','hiv','Diabetes','Blood pressure','Heart attack','Caridiac arrest','Animea','Pneumoniae','Tuberculosis','Stroke','Cancer','Diarrhea','Alzheimer ','Cirrhosis','Respiratory ilness',
+                'Pancreatitis','Appendicitis','Bone cancer','Brain tumor','Breast cancer','Bronchitis','NONE','Chickenpox','Coma','Cystitis','Flu','Genital herps','Genital warts','Piles','Hepatitis B','Insomnia',
+                'Kidney stones','Malaria','Migraine','Thyroid','NONE','Parkinsons','NONE']
+o_symp=['aches and pains','sore throat','diarrhoea','conjuctivitis','headache','loss of taste or smell','a rash on skin or discolouration of fingers or toes','fever','dry cough',
+               'tiredness','difficulty breathing or shortness of breath','chest pain or pressure','loss of speech or movement','NONE']
+
+
+main=Tk(className=" CMRIT")
+
+frame1=LabelFrame(main,text="COVID-19",fg="RED",width=1000,height=1000)
+frame1.pack(side=LEFT,fill=BOTH,expand=True)
+#scroll=Scrollbar(main)
+output=LabelFrame(main,text="Output Screen",fg="WHITE",bg="black",width=1000,height=1000)
+output.pack(side=RIGHT,fill=BOTH,expand=True)
+ 
+
+def update_data():
+
+
+       person=[]
+       uni=1
+       for i in range(1000):
+              lst=[]
+              lst.append(choice(gender))
+              lst.append(randint(15,90))
+              lst.append(choice(corona_symtomp))
+              lst.append(choice(o_symp))
+              lst.append(choice(ward))
+              lst.append(uni)
+              person.append(lst)
+              uni+=1
+       
+       
+      # l1=Label(output,text="Data of persons in different wards",fg="GREEN",bg="RED").pack(side=TOP,fill=X)
+       l=Label(output,text="GENDER----AGE----Corona_Symptoms----Other_Symptoms----Locality",fg="GREEN").pack(side=TOP)
+       
+       Label(output,text="<<<<Persons having symptoms of corona viruses>>>>",fg="RED",bg="black").pack(side=TOP)
+       dic={}
+       for i in range(len(ward)):
+              dic[ward[i]]=0
+       man=[]
+       c=0
+       for i in range(1000):
+              lst=[]
+              lst=person[i]
+              if(lst[2]!='NONE' and lst[4] not in red):
+                     dic[lst[4]]+=1
+                     man.append(lst)
+                     c+=1
+       
+       lbo=Listbox(output,width=1000,height=1000)
+       for i in range(c):
+             lbo.insert(i,man[i])
+       lbo.pack()
+       dic={y:x for x,y in dic.items()}
+       lst=[]
+       
+       lst=list(dic.items())
+       lst.sort(reverse=True)
+       dic=dict(lst)
+      
+       
+       lst=[]
+       sum=0
+       kl=0
+       for k,v in dic.items():
+              lst.append(v)
+              sum+=k
+              kl+=1
+              if(kl==3):
+                     break
+       alter={}
+        
+       for i in range(c):
+           p=man[i]
+           if(p[4] in lst):
+               alter[p[5]]=p[4]
+       tab=Tk(className="WARD")
+       tab.geometry("200x600")
+       frame=Frame(tab)
+       frame.pack()
+       listb=Listbox(frame,width=1000,height=1000)
+       for key in dic:
+           listb.insert(END, '{}: {}'.format(key, dic[key]))
+       listb.insert(END,'{} these 3 ward were van will {} no. of patient'.format(str(lst),str(sum)))
+       listb.insert(END,'ALERT MESSAGE TO SEND ON THIS UNNIQUE-ID TO WARDS')
+       listb.insert(END,'UNICODE WARDS')
+       for ji in alter:
+           listb.insert(END, '{}: {}'.format(ji, alter[ji]))
+       listb.pack()
+       tab.mainloop()
+       #mybutton2['state']=NORMAL
+       #mybutton['state']=DISABLED
+
+#scroll=Scrollbar(main)
+#scroll.pack(side=RIGHT,fill=Y)
+#scroll.config(command=output.yview)
+clicked1=StringVar()
+clicked2=StringVar()
+clicked3=StringVar()
+L1=Label(frame1,text="Country").pack()
+country=OptionMenu(frame1,clicked1,"INDIA","CHINA","PAKISTAN","AFGANISTAN","NEPAL").pack(pady=20)
+L2=Label(frame1,text="State").pack()
+state=OptionMenu(frame1,clicked2,"KARNATAKA","MAHARASTRA","TAMIL NADU","").pack(pady=20)
+L3=Label(frame1,text="City").pack()
+city=OptionMenu(frame1,clicked3,"BANGALORE","MUMBAI").pack(pady=20)
+
+#myimg=ImageTk.PhotoImage(Image.open ("C:\\Users\admin\Documents\python\covid.jpg"))
+#mylabel=Label(image=myimg)
+#mylabel.pack()
+mybutton=Button(frame1,text="START",command=update_data,fg="Black",bg="RED").pack(side=BOTTOM)
+#mybutton2=Button(frame1,text="UPDATE",state=DISABLED,command=update_data,fg="Black",bg="RED").pack(side=RIGHT,padx=20)
+
+main.mainloop()
